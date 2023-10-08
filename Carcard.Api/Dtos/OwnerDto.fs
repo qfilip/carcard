@@ -11,5 +11,8 @@ type OwnerDto = {
 
 module OwnerDto =
     let toModel (dto: OwnerDto) =
-        Owner.Utils.create (Guid.NewGuid(), dto.Name, None)
+        Owner.Utils.create (dto.Name)
+
+    let ofModel (model: Owner) =
+        { Id = model.Id; Name = model.Name }
 

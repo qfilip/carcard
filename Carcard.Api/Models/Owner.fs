@@ -29,7 +29,7 @@ module Owner =
 
     type Utils() =
         static member create (name: string) =
-            validate (Guid.NewGuid()) name None
+            validate (Guid.NewGuid()) name (None)
 
         static member create (name: string, vehicles: option<list<Vehicle>>) =
             validate (Guid.NewGuid()) name vehicles

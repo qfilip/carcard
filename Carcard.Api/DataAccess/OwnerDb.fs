@@ -29,6 +29,24 @@ module OwnerDb =
         (formatter, operation)
     
 
+    let getOwnerByNameQuery (name: string) =
+        let formatter (cmd: SQLiteCommand) =
+            cmd.CommandText <- "SELECT * FROM Owner WHERE Name = @Name"
+            cmd.Parameters.AddWithValue("@Name", name) |> ignore
+
+        let operation (cmd: SQLiteCommand) = task {
+            use! reader = cmd.ExecuteReaderAsync();
+            
+            let mutable records: Owner list = []
+            while reader.Read() do
+                records <- (mapOwner reader)::records
+            
+            return records
+        }
+
+        (formatter, operation)
+
+
     let getInsertOwnerCommand (x: Owner) =
         let formatter (cmd: SQLiteCommand) =
             let cmdText =
