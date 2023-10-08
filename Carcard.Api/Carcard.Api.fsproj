@@ -1,0 +1,33 @@
+<Project Sdk="Microsoft.NET.Sdk.Web">
+
+  <PropertyGroup>
+    <TargetFramework>net7.0</TargetFramework>
+  </PropertyGroup>
+
+  <ItemGroup>
+    <Compile Include="ComputationExpressions\ExpressionUtils.fs" />
+    <Compile Include="ComputationExpressions\OptionExpression.fs" />
+    <Compile Include="ComputationExpressions\ResultExpression.fs" />
+    <Compile Include="Primitives\DomainError.fs" />
+    <Compile Include="Primitives\Year.fs" />
+    <Compile Include="Models\Maintenance.fs" />
+    <Compile Include="Models\Vehicle.fs" />
+    <Compile Include="Models\Owner.fs" />
+    <Compile Include="Dtos\OwnerDto.fs" />
+    <Compile Include="Startup.fs" />
+    <Compile Include="DataAccess\DbUtils.fs" />
+    <Compile Include="DataAccess\OwnerDb.fs" />
+    <Compile Include="Handlers\OwnerHandlers.fs" />
+    <Compile Include="Endpoints\EndpointUtils.fs" />
+    <Compile Include="Endpoints\V1.0\OwnerEndpointsV1_0.fs" />
+    <Compile Include="Endpoints\OwnerEndpoints.fs" />
+    <Compile Include="Program.fs" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <PackageReference Include="FsToolkit.ErrorHandling" Version="4.9.0" />
+    <PackageReference Include="FsToolkit.ErrorHandling.TaskResult" Version="4.9.0" />
+    <PackageReference Include="System.Data.SQLite.Core" Version="1.0.118" />
+  </ItemGroup>
+
+</Project>
