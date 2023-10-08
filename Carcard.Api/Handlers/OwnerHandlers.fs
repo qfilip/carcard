@@ -4,6 +4,7 @@ open FsToolkit.ErrorHandling
 open Carcard.Api.Dtos
 open Carcard.Api.DataAccess
 open Carcard.Api.Primitives
+open Carcard.Api.Models
 
 let getAll () = task {
     let! owners =
@@ -11,7 +12,7 @@ let getAll () = task {
         |> OwnerDb.getAllOwnersQuery
         |> DbUtils.execute
 
-    return owners |> List.map OwnerDto.ofModel
+    return owners |> List.map OwnerDto.ofDbRecord
 }
 
 
@@ -25,11 +26,15 @@ let insert (dto: OwnerDto) = taskResult {
 
     match existingOwners.Length with
     | 0 ->
+        let dbRecord = {
+            Record = model
+            EntityData = EntityData.create ()
+        }
         let! _ =
-            model
+            dbRecord
             |> OwnerDb.getInsertOwnerCommand 
             |> DbUtils.execute
-        return Ok model
+        return Ok (model |> OwnerDto.ofModel)
     | 1 ->
         return Error (DomainError.Rejected "Owner with the same already exists")
     | _ ->

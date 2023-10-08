@@ -1,12 +1,12 @@
 ﻿namespace Carcard.Api.Dtos
 
-open System
 open Carcard.Api.Models
+open Carcard.Api.DataAccess
 
 [<CLIMutable>]
 type OwnerDto = {
-    Id: Guid
     Name: string
+    EntityData: EntityData
 }
 
 module OwnerDto =
@@ -14,5 +14,8 @@ module OwnerDto =
         Owner.Utils.create (dto.Name)
 
     let ofModel (model: Owner) =
-        { Id = model.Id; Name = model.Name }
+        { Name = model.Name; EntityData = EntityData.empty }
+
+    let ofDbRecord (dbr: DbRecord<Owner>) =
+        { Name = dbr.Record.Name; EntityData = dbr.EntityData }
 

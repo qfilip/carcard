@@ -3,14 +3,17 @@
 open System.Data.SQLite
 open System.Data.Common
 open Carcard.Api.Models
+open DbUtils
 
 module OwnerDb =
     let mapOwner (rdr: DbDataReader) =
-        {
-            Id = DbUtils.read (nameof Unchecked.defaultof<Owner>.Id) rdr.GetGuid rdr
+        let mapper () = {
             Name = DbUtils.read (nameof Unchecked.defaultof<Owner>.Name) rdr.GetString rdr
             Vehicles = None
         }
+
+        DbUtils.mapDbRecord rdr mapper
+
 
     let getAllOwnersQuery () =
         let formatter (cmd: SQLiteCommand) =
@@ -19,7 +22,7 @@ module OwnerDb =
         let operation (cmd: SQLiteCommand) = task {
             use! reader = cmd.ExecuteReaderAsync();
             
-            let mutable records: Owner list = []
+            let mutable records: DbRecord<Owner> list = []
             while reader.Read() do
                 records <- (mapOwner reader)::records
             
@@ -37,7 +40,7 @@ module OwnerDb =
         let operation (cmd: SQLiteCommand) = task {
             use! reader = cmd.ExecuteReaderAsync();
             
-            let mutable records: Owner list = []
+            let mutable records: DbRecord<Owner> list = []
             while reader.Read() do
                 records <- (mapOwner reader)::records
             
@@ -47,7 +50,7 @@ module OwnerDb =
         (formatter, operation)
 
 
-    let getInsertOwnerCommand (x: Owner) =
+    let getInsertOwnerCommand (x: DbRecord<Owner>) =
         let formatter (cmd: SQLiteCommand) =
             let cmdText =
                 """
@@ -56,8 +59,8 @@ module OwnerDb =
                 """
 
             cmd.CommandText <- cmdText
-            cmd.Parameters.AddWithValue("@Id", x.Id.ToString()) |> ignore
-            cmd.Parameters.AddWithValue("@Name", x.Name) |> ignore
+            cmd.Parameters.AddWithValue("@Id", x.EntityData.Id.ToString()) |> ignore
+            cmd.Parameters.AddWithValue("@Name", x.Record.Name) |> ignore
 
         let operation (cmd: SQLiteCommand) = task {
             return! cmd.ExecuteNonQueryAsync()

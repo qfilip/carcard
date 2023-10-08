@@ -5,7 +5,6 @@ open Carcard.Api.Primitives
 open Carcard.Api.ComputationExpressions
 
 type Owner = {
-    Id: Guid
     Name: string
     Vehicles: option<list<Vehicle>>
 }
@@ -20,21 +19,18 @@ module Owner =
         | x -> Ok x
 
 
-    let validate (id: Guid) (name: string) (vehicles: option<list<Vehicle>>) =
+    let validate (name: string) (vehicles: option<list<Vehicle>>) =
         let exp = ResultExpression()
         exp {
             let! oname = validateName name
-            return { Id = id; Name = oname; Vehicles = vehicles }
+            return { Name = oname; Vehicles = vehicles }
         }
 
     type Utils() =
         static member create (name: string) =
-            validate (Guid.NewGuid()) name (None)
+            validate name None
 
         static member create (name: string, vehicles: option<list<Vehicle>>) =
-            validate (Guid.NewGuid()) name vehicles
-    
-        static member create (id: Guid, name: string, vehicles: option<list<Vehicle>>) =
-            validate id name vehicles
+            validate name vehicles
 
 

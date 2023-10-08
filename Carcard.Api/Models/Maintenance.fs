@@ -3,6 +3,7 @@
 open System
 
 type Maintenance = {
+    Id: Guid
     Repairman: string
     Date: DateTime
     Distance: int

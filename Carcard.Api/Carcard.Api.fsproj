@@ -5,6 +5,7 @@
   </PropertyGroup>
 
   <ItemGroup>
+    <Compile Include="Utilities.fs" />
     <Compile Include="ComputationExpressions\ExpressionUtils.fs" />
     <Compile Include="ComputationExpressions\OptionExpression.fs" />
     <Compile Include="ComputationExpressions\ResultExpression.fs" />
@@ -13,10 +14,12 @@
     <Compile Include="Models\Maintenance.fs" />
     <Compile Include="Models\Vehicle.fs" />
     <Compile Include="Models\Owner.fs" />
-    <Compile Include="Dtos\OwnerDto.fs" />
     <Compile Include="Startup.fs" />
     <Compile Include="DataAccess\DbUtils.fs" />
     <Compile Include="DataAccess\OwnerDb.fs" />
+    <Compile Include="Dtos\MaintenanceDto.fs" />
+    <Compile Include="Dtos\VehicleDto.fs" />
+    <Compile Include="Dtos\OwnerDto.fs" />
     <Compile Include="Handlers\OwnerHandlers.fs" />
     <Compile Include="Endpoints\EndpointUtils.fs" />
     <Compile Include="Endpoints\V1.0\OwnerEndpointsV1_0.fs" />
