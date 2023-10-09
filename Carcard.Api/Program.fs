@@ -1,5 +1,8 @@
 namespace Carcard.Api
 
+open Carcard.Api.Dtos
+open System
+
 #nowarn "20"
 
 open Microsoft.AspNetCore.Builder
@@ -10,7 +13,6 @@ module Program =
 
     [<EntryPoint>]
     let main args =
-
         let builder = WebApplication.CreateBuilder(args)
 
         Startup.runStartupConfig builder.Environment

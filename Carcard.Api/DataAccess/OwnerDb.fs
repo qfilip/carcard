@@ -1,18 +1,24 @@
 ﻿namespace Carcard.Api.DataAccess
 
+open System
 open System.Data.SQLite
 open System.Data.Common
 open Carcard.Api.Models
-open DbUtils
+
+type OwnerRelations = OwnerRelations
+
+type OwnerDbRecord = DbRecord<Owner, OwnerRelations>
 
 module OwnerDb =
-    let mapOwner (rdr: DbDataReader) =
-        let mapper () = {
+    let mapDbRecord (rdr: DbDataReader) =
+        let modelMapper () = {
             Name = DbUtils.read (nameof Unchecked.defaultof<Owner>.Name) rdr.GetString rdr
-            Vehicles = None
+            Vehicles = []
         }
 
-        DbUtils.mapDbRecord rdr mapper
+        let relationsMapper () = OwnerRelations
+
+        DbUtils.mapDbRecord rdr modelMapper relationsMapper
 
 
     let getAllOwnersQuery () =
@@ -22,11 +28,27 @@ module OwnerDb =
         let operation (cmd: SQLiteCommand) = task {
             use! reader = cmd.ExecuteReaderAsync();
             
-            let mutable records: DbRecord<Owner> list = []
+            let mutable records: OwnerDbRecord list = []
             while reader.Read() do
-                records <- (mapOwner reader)::records
+                records <- (mapDbRecord reader)::records
             
             return records
+        }
+
+        (formatter, operation)
+
+
+    let getByIdQuery (id: Guid) =
+        let formatter (cmd: SQLiteCommand) =
+            cmd.CommandText <- "SELECT * FROM Owner WHERE Id = @Id"
+            cmd.Parameters.AddWithValue("@Id", id) |> ignore
+
+        let operation (cmd: SQLiteCommand) = task {
+            use! reader = cmd.ExecuteReaderAsync();
+            
+            match reader.Read() with
+            | true -> return Some (mapDbRecord reader)
+            | false -> return None
         }
 
         (formatter, operation)
@@ -40,9 +62,9 @@ module OwnerDb =
         let operation (cmd: SQLiteCommand) = task {
             use! reader = cmd.ExecuteReaderAsync();
             
-            let mutable records: DbRecord<Owner> list = []
+            let mutable records: OwnerDbRecord list = []
             while reader.Read() do
-                records <- (mapOwner reader)::records
+                records <- (mapDbRecord reader)::records
             
             return records
         }
@@ -50,7 +72,7 @@ module OwnerDb =
         (formatter, operation)
 
 
-    let getInsertOwnerCommand (x: DbRecord<Owner>) =
+    let getInsertOwnerCommand (x: OwnerDbRecord) =
         let formatter (cmd: SQLiteCommand) =
             let cmdText =
                 """
@@ -60,7 +82,7 @@ module OwnerDb =
 
             cmd.CommandText <- cmdText
             cmd.Parameters.AddWithValue("@Id", x.EntityData.Id.ToString()) |> ignore
-            cmd.Parameters.AddWithValue("@Name", x.Record.Name) |> ignore
+            cmd.Parameters.AddWithValue("@Name", x.Model.Name) |> ignore
 
         let operation (cmd: SQLiteCommand) = task {
             return! cmd.ExecuteNonQueryAsync()

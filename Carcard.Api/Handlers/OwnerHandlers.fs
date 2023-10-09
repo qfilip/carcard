@@ -1,5 +1,6 @@
 ﻿module OwnerHandlers
 
+open System
 open FsToolkit.ErrorHandling
 open Carcard.Api.Dtos
 open Carcard.Api.DataAccess
@@ -15,8 +16,13 @@ let getAll () = task {
     return owners |> List.map OwnerDto.ofDbRecord
 }
 
+let getById (id: Guid) =
+    id
+    |> OwnerDb.getByIdQuery
+    |> DbUtils.execute
 
-let insert (dto: OwnerDto) = taskResult {
+
+let create (dto: OwnerDto) = taskResult {
     let! model = OwnerDto.toModel dto
     
     let! existingOwners =
@@ -27,8 +33,9 @@ let insert (dto: OwnerDto) = taskResult {
     match existingOwners.Length with
     | 0 ->
         let dbRecord = {
-            Record = model
-            EntityData = EntityData.create ()
+            Model = model
+            EntityData = EntityData.Empty
+            EntityRelations = OwnerRelations
         }
         let! _ =
             dbRecord

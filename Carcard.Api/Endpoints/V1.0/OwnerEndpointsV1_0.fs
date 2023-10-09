@@ -5,7 +5,6 @@
 open System
 open System.Threading.Tasks
 open Microsoft.AspNetCore.Builder
-open Microsoft.AspNetCore.Hosting
 open Microsoft.AspNetCore.Http
 open Carcard.Api.Dtos
 
@@ -18,8 +17,8 @@ module OwnerEndpointsV1_0 =
 
 
     let private insert =
-        Func<OwnerDto, IWebHostEnvironment, Task<IResult>>(fun dto env -> task {
-            let! result = OwnerHandlers.insert dto
+        Func<OwnerDto, Task<IResult>>(fun dto -> task {
+            let! result = OwnerHandlers.create dto
             return EndpointUtils.mapResult (Results.Ok) result
         })
 

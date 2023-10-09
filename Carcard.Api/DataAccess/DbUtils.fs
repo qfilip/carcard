@@ -7,19 +7,19 @@ open System.Threading.Tasks
 
 type EntityData = {
     Id: Guid
-    //CreatedAt: DateTime
-    //ModifiedAt: DateTime
-}
+} with
+    static member Empty = {
+        Id = Guid.Empty
+    }
 
 module EntityData =
-    let empty = { Id = Guid.Empty }
-
     let create () = { Id = Guid.NewGuid() }
 
 
-type DbRecord<'a> = {
-    Record: 'a
+type DbRecord<'a, 'b> = {
+    Model: 'a
     EntityData: EntityData
+    EntityRelations: 'b
 }
 
 module DbUtils =
@@ -29,15 +29,15 @@ module DbUtils =
         |> readOrdinal
 
 
-    let mapDbRecord (rdr: DbDataReader) (mapper: unit -> 'a) =
-        let dbRecord = mapper ()
+    let mapDbRecord (rdr: DbDataReader) (modelMapper: unit -> 'a) (relationsMapper: unit -> 'b) =
         let entityData = {
             Id = read (nameof Unchecked.defaultof<EntityData>.Id) rdr.GetGuid rdr
         }
 
         {
-            Record = dbRecord
+            Model = modelMapper ()
             EntityData = entityData
+            EntityRelations = relationsMapper ()
         }
 
 
