@@ -7,7 +7,7 @@ let mutable private dbConnectionString: string option = None
 
 let private setDbConnectionString (env: IWebHostEnvironment) =
     let dbPath = IO.Path.Combine(env.WebRootPath, "database")
-    dbConnectionString <- Some (sprintf "Data Source=%s;Version=3" dbPath)
+    dbConnectionString <- Some (sprintf "Data Source=%s;" dbPath)
 
 let getDbConnectionString () =
     match dbConnectionString with

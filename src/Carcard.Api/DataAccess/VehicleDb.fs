@@ -16,16 +16,13 @@ type VehicleDbRecord = DbRecord<Vehicle, VehicleRelations>
 
 module VehicleDb =
     let private mapDbRecord (rdr: DbDataReader) =
-        let m (x: 'a) = x.Get
-        let read = DbUtils.read2 rdr
-        
         ()
-        let modelMapper () = {
-            Vendor = read m.Vendor |> rdr.GetString
-            Model = read m.Model |> rdr.GetString
-            Year = read m.Year |> rdr.GetDateTime
-            MaintenanceHistory = []
-        }
+        let modelMapper () = Unchecked.defaultof<Vehicle>
+            //Vendor = read m.Vendor |> rdr.GetString
+            //Model = read m.Model |> rdr.GetString
+            //Year = read m.Year |> rdr.GetDateTime
+            //MaintenanceHistory = []
+
 
         let relationsMapper () = {
             OwnerId = DbUtils.read (nameof Unchecked.defaultof<VehicleRelations>.OwnerId) rdr.GetGuid rdr
