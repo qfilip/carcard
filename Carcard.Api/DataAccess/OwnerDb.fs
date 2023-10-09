@@ -41,7 +41,7 @@ module OwnerDb =
     let getByIdQuery (id: Guid) =
         let formatter (cmd: SQLiteCommand) =
             cmd.CommandText <- "SELECT * FROM Owner WHERE Id = @Id"
-            cmd.Parameters.AddWithValue("@Id", id) |> ignore
+            cmd.Parameters.AddWithValue("@Id", id.ToString()) |> ignore
 
         let operation (cmd: SQLiteCommand) = task {
             use! reader = cmd.ExecuteReaderAsync();

@@ -34,16 +34,16 @@ let create (dto: OwnerDto) = taskResult {
     | 0 ->
         let dbRecord = {
             Model = model
-            EntityData = EntityData.Empty
+            EntityData = EntityData.New
             EntityRelations = OwnerRelations
         }
         let! _ =
             dbRecord
             |> OwnerDb.getInsertOwnerCommand 
             |> DbUtils.execute
-        return Ok (model |> OwnerDto.ofModel)
+        return! Ok (dbRecord |> OwnerDto.ofDbRecord)
     | 1 ->
-        return Error (DomainError.Rejected "Owner with the same already exists")
+        return! Error (DomainError.Rejected "Owner with the same already exists")
     | _ ->
         return failwith (sprintf "More than one owner with name %s found" model.Name)
 }

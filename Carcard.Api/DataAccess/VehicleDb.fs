@@ -18,7 +18,7 @@ module VehicleDb =
         let formatter (cmd: SQLiteCommand) =
             let cmdText =
                 """
-                    insert into Owner(Id, Vendor, Model, Year)
+                    insert into Vehicle(Id, Vendor, Model, Year)
                     values (@Id, @Vendor, @Model, @Year)
                 """
 
