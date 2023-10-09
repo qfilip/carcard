@@ -1,18 +1,19 @@
 ﻿namespace Carcard.Api.Dtos
 
+open System
 open Carcard.Api.Models
 open Carcard.Api.DataAccess
 
 [<CLIMutable>]
 type OwnerDto = {
+    Id: Guid
     Name: string
     Vehicles: VehicleDto list
-    EntityData: EntityData
 } with
     static member Default = {
-        Name = null
+        Id = Guid.Empty
+        Name = ""
         Vehicles = []
-        EntityData = EntityData.Empty
     }
 
 
@@ -25,14 +26,15 @@ module OwnerDto =
          { OwnerDto.Default with
             Name = model.Name
             Vehicles = model.Vehicles |> List.map VehicleDto.ofModel
-            EntityData = EntityData.Empty
          }
 
 
     let ofDbRecord (dbr: OwnerDbRecord) =
-        { OwnerDto.Default with
+        let dto: OwnerDto = { 
+            Id = dbr.EntityData.Id
             Name = dbr.Model.Name
             Vehicles = dbr.Model.Vehicles |> List.map VehicleDto.ofModel
-            EntityData = dbr.EntityData
         }
+
+        dto
 

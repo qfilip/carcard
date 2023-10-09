@@ -9,7 +9,7 @@ let create (dto: VehicleDto) = taskResult {
     let! model = VehicleDto.toModel dto
     
     let! ownerDbr =
-        dto.EntityRelations.OwnerId
+        dto.OwnerId
         |> OwnerDb.getByIdQuery
         |> DbUtils.execute
 

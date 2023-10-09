@@ -6,20 +6,20 @@ open Carcard.Api.Models
 
 [<CLIMutable>]
 type VehicleDto = {
+    Id: Guid
+    OwnerId: Guid
     Vendor: string
     Model: string
     Year: DateTime
     MaintenanceHistory: MaintenanceDto list
-    EntityData: EntityData
-    EntityRelations: VehicleRelations
 } with
     static member Default = {
-        Vendor = null
-        Model = null
+        Id = Guid.Empty
+        OwnerId = Guid.Empty
+        Vendor = ""
+        Model = ""
         Year = DateTime.MinValue
         MaintenanceHistory = []
-        EntityData = EntityData.Empty
-        EntityRelations = VehicleRelations.Empty
     }
 
 module VehicleDto =
@@ -28,26 +28,22 @@ module VehicleDto =
     
 
     let ofModel (model: Vehicle) =
-        let dto: VehicleDto = {
+        { VehicleDto.Default with
             Vendor = model.Vendor
             Model = model.Model
             Year = model.Year
             MaintenanceHistory = model.MaintenanceHistory |> List.map MaintenanceDto.ofModel
-            EntityData = EntityData.Empty
-            EntityRelations = VehicleRelations.Empty
         }
 
-        dto
 
-
-    let ofDbRecord (dr: VehicleDbRecord) =
+    let ofDbRecord (dbr: VehicleDbRecord) =
         let dto: VehicleDto = {
-            Vendor = dr.Model.Vendor
-            Model = dr.Model.Model
-            Year = dr.Model.Year
-            MaintenanceHistory = dr.Model.MaintenanceHistory |> List.map MaintenanceDto.ofModel
-            EntityData = dr.EntityData
-            EntityRelations = dr.EntityRelations
+            Id = dbr.EntityData.Id
+            OwnerId = dbr.EntityRelations.OwnerId
+            Vendor = dbr.Model.Vendor
+            Model = dbr.Model.Model
+            Year = dbr.Model.Year
+            MaintenanceHistory = dbr.Model.MaintenanceHistory |> List.map MaintenanceDto.ofModel
         }
 
         dto
