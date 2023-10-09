@@ -20,6 +20,7 @@
     <Compile Include="DataAccess\VehicleDb.fs" />
     <Compile Include="DataAccess\OwnerDb.fs" />
     <Compile Include="Dtos\Maintenance\MaintenanceDto.fs" />
+    <Compile Include="Dtos\Vehicle\ChangeOwnerDto.fs" />
     <Compile Include="Dtos\Vehicle\VehicleDto.fs" />
     <Compile Include="Dtos\Owner\OwnerDto.fs" />
     <Compile Include="Handlers\VehicleHandlers.fs" />

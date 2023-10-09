@@ -30,3 +30,7 @@ let create (dto: VehicleDto) = taskResult {
     
     return VehicleDto.ofDbRecord dbRecord
 }
+
+let changeOwner (dto: ChangeOwnerDto) = taskResult {
+    
+}

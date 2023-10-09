@@ -26,6 +26,9 @@ type DbRecord<'a, 'b> = {
 }
 
 module DbUtils =
+    let read2<'T> (reader: DbDataReader) (x: 'T) =
+        nameof x |> reader.GetOrdinal
+
     let read (property: string) (readOrdinal: int -> 'a) (reader: DbDataReader) =
         property
         |> reader.GetOrdinal
