@@ -11,9 +11,12 @@ type EntityData = {
     static member Empty = {
         Id = Guid.Empty
     }
+    static member New = {
+        Id = Guid.NewGuid()
+    }
 
 module EntityData =
-    let create () = { Id = Guid.NewGuid() }
+    let create (createdAt: DateTime) (modifiedAt: DateTime) = { Id = Guid.NewGuid() }
 
 
 type DbRecord<'a, 'b> = {

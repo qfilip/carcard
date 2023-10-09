@@ -3,6 +3,7 @@
 open FsToolkit.ErrorHandling
 open Carcard.Api.Dtos
 open Carcard.Api.DataAccess
+open Carcard.Api.Primitives
 
 let create (dto: VehicleDto) = taskResult {
     let! model = VehicleDto.toModel dto
@@ -12,11 +13,14 @@ let create (dto: VehicleDto) = taskResult {
         |> OwnerDb.getByIdQuery
         |> DbUtils.execute
 
-    //let! owner = 
+    let! ownerData = 
+        ownerDbr
+        |> DomainError.ofOptionMap (fun x -> x.EntityData) (Rejected "OwnerId not found")
+
     let dbRecord = {
         Model = model
-        EntityData = EntityData.create ()
-        EntityRelations = { OwnerId = dto.EntityRelations.OwnerId }
+        EntityData = EntityData.New
+        EntityRelations = { OwnerId = ownerData.Id }
     }
 
     let! _ =

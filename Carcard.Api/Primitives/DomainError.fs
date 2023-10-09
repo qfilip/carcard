@@ -6,8 +6,14 @@ type DomainError =
 | NotFound of string
 
 module DomainError =
-    let ofOption (opt: 'a option) (errorType: DomainError) =
+    let ofOptionMap (mapper: 'a -> 'b) (domainError: DomainError) (opt: 'a option) =
+        match opt with
+        | Some x -> Ok (mapper x)
+        | None -> Error domainError
+
+
+    let ofOption (domainError: DomainError) (opt: 'a option) =
         match opt with
         | Some x -> Ok x
-        | None -> Error errorType
+        | None -> Error domainError
 
