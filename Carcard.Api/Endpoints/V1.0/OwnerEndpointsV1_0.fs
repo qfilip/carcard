@@ -16,7 +16,7 @@ module OwnerEndpointsV1_0 =
         })
 
 
-    let private insert =
+    let private create =
         Func<OwnerDto, Task<IResult>>(fun dto -> task {
             let! result = OwnerHandlers.create dto
             return EndpointUtils.mapResult (Results.Ok) result
@@ -27,7 +27,7 @@ module OwnerEndpointsV1_0 =
         let group = app.MapGroup("v1.0/owners")
 
         group.MapGet("", getAll)
-        group.MapPost("/insert", insert)
+        group.MapPost("/create", create)
 
         ()
     

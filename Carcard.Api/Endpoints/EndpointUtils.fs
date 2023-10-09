@@ -9,4 +9,5 @@ open Carcard.Api.Primitives
         | Error de ->
             match de with
             | Validation e -> Results.BadRequest e
+            | NotFound e -> Results.NotFound e
             | Rejected e -> Results.Conflict e

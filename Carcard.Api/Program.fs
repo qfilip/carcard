@@ -20,6 +20,7 @@ module Program =
         let app = builder.Build()
 
         Endpoints.OwnerEndpoints.map app
+        Endpoints.VehicleEndpoints.map app
         
         app.UseHttpsRedirection()
 
