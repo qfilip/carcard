@@ -4,19 +4,46 @@ open System
 open System.Data.Common
 open System.Data.SQLite
 open System.Threading.Tasks
+open Carcard.Database.Entities
+open Carcard.Database.Enums
 
 type EntityData = {
     Id: Guid
+    EntityStatus: eEntityStatus
+    CreatedAt: DateTime
+    ModifiedAt: DateTime
 } with
     static member Empty = {
         Id = Guid.Empty
-    }
-    static member New = {
-        Id = Guid.NewGuid()
+        EntityStatus = eEntityStatus.Active
+        CreatedAt = DateTime.MinValue
+        ModifiedAt = DateTime.MinValue
     }
 
 module EntityData =
-    let create (createdAt: DateTime) (modifiedAt: DateTime) = { Id = Guid.NewGuid() }
+    let ofBaseEntity (x: BaseEntity) =
+        {
+            Id = x.Id
+            EntityStatus = x.EntityStatus
+            CreatedAt = x.CreatedAt
+            ModifiedAt = x.ModifiedAt
+        }
+
+    let populateBaseEntity (e: BaseEntity) (ed: EntityData) =
+        e.Id <- ed.Id
+        e.EntityStatus <- ed.EntityStatus
+        e.CreatedAt <- ed.CreatedAt
+        e.ModifiedAt <- ed.ModifiedAt
+
+
+    let createNew () =
+        let now = DateTime.UtcNow
+        {
+            Id = Guid.NewGuid()
+            EntityStatus = eEntityStatus.Active
+            CreatedAt = now
+            ModifiedAt = now
+        }
 
 
 type DbRecord<'a, 'b> = {

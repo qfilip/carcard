@@ -7,7 +7,7 @@ open Carcard.Api.ComputationExpressions
 type Vehicle = {
     Vendor: String1
     Model: String1
-    Year: DateTime
+    Year: VehicleYear
     MaintenanceHistory: Maintenance list
 }
 
@@ -15,12 +15,12 @@ module Vehicle =
     let validate
         (vendor: string)
         (model: string)
-        (year: DateTime)
+        (year: int)
         (maintenanceHistory: Maintenance list) =
-        let exp = ResultExpression()
-        exp {
-            let! vendor = Validators.validateLength vendor 2 "Vendor"
-            let! model = Validators.validateLength model 2 "Model"
+        ResultExpression() {
+            let! vendor =   vendor  |> String1.ofString
+            and! model =    model   |> String1.ofString 
+            and! year =     year    |> VehicleYear.ofInt DateTime.UtcNow
             
             return { 
                 Vendor = vendor;
@@ -31,9 +31,9 @@ module Vehicle =
         }
 
     type Utils() =
-        static member create (vendor: string, model: string, year: DateTime) =
+        static member create (vendor: string, model: string, year: int) =
             validate vendor model year []
 
-        static member create (vendor: string, model: string, year: DateTime, maintenanceHistory: Maintenance list) =
+        static member create (vendor: string, model: string, year: int, maintenanceHistory: Maintenance list) =
             validate vendor model year maintenanceHistory
 

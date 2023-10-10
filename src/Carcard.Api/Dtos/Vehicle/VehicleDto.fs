@@ -3,6 +3,7 @@
 open System
 open Carcard.Api.DataAccess
 open Carcard.Api.Models
+open Carcard.Api.Primitives
 
 [<CLIMutable>]
 type VehicleDto = {
@@ -29,21 +30,25 @@ module VehicleDto =
 
     let ofModel (model: Vehicle) =
         { VehicleDto.Default with
-            Vendor = model.Vendor
-            Model = model.Model
-            Year = model.Year
-            MaintenanceHistory = model.MaintenanceHistory |> List.map MaintenanceDto.ofModel
+            Vendor =    model.Vendor    |> String1.raw
+            Model =     model.Model     |> String1.raw
+            Year =      model.Year
+            MaintenanceHistory =
+                        model.MaintenanceHistory
+                        |> List.map MaintenanceDto.ofModel
         }
 
 
     let ofDbRecord (dbr: VehicleDbRecord) =
         let dto: VehicleDto = {
             Id = dbr.EntityData.Id
-            OwnerId = dbr.EntityRelations.OwnerId
-            Vendor = dbr.Model.Vendor
-            Model = dbr.Model.Model
-            Year = dbr.Model.Year
-            MaintenanceHistory = dbr.Model.MaintenanceHistory |> List.map MaintenanceDto.ofModel
+            OwnerId =   dbr.EntityRelations.OwnerId
+            Vendor =    dbr.Model.Vendor    |> String1.raw
+            Model =     dbr.Model.Model     |> String1.raw
+            Year =      dbr.Model.Year
+            MaintenanceHistory =
+                dbr.Model.MaintenanceHistory
+                |> List.map MaintenanceDto.ofModel
         }
 
         dto

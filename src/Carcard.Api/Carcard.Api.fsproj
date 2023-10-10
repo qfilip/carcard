@@ -21,6 +21,7 @@
     <Compile Include="Models\Owner.fs" />
     <Compile Include="Startup.fs" />
     <Compile Include="DataAccess\DbUtils.fs" />
+    <Compile Include="DataAccess\MaintenanceDb.fs" />
     <Compile Include="DataAccess\VehicleDb.fs" />
     <Compile Include="DataAccess\OwnerDb.fs" />
     <Compile Include="Dtos\Maintenance\MaintenanceDto.fs" />
