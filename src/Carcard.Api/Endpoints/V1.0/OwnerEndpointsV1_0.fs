@@ -1,5 +1,7 @@
 ﻿namespace Carcard.Api.Endpoints.V1_0
 
+open Carcard.Database.Contexts
+
 #nowarn "20"
 
 open System
@@ -14,6 +16,12 @@ module OwnerEndpointsV1_0 =
             let! result = OwnerHandlers.getAll ()
             return EndpointUtils.mapResult (Results.Ok) (Ok result)
         })
+
+    
+    let private getById =
+        Func<Guid, AppDbContext, Task<IResult>>(fun id dbContext ->
+            
+        )
 
 
     let private create =

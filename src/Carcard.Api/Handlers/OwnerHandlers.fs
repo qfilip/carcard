@@ -1,11 +1,18 @@
 ﻿module OwnerHandlers
 
 open System
+open System.Linq
 open FsToolkit.ErrorHandling
+open Microsoft.EntityFrameworkCore
+
 open Carcard.Api.Dtos
 open Carcard.Api.DataAccess
 open Carcard.Api.Primitives
 open Carcard.Api.Models
+open Carcard.Database.Contexts
+open Carcard.Database.Entities
+
+open Utilities
 
 let getAll () = task {
     let! owners =

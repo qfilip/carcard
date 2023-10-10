@@ -3,14 +3,11 @@
 open System
 
 module Validators =
-    let validateLength (str: string) (requiredLength: int) (propertyName: string) =
-        let getErrorMessage () =
-            sprintf "Property %s must be at least %i characters long" propertyName requiredLength
+    let strLength (requiredLength: int) (str: string) =
+        let getError () = Error (sprintf "Minimum required length is %i" requiredLength)
         
         match str with
-        | x when String.IsNullOrEmpty(x) ->
-            Error (DomainError.Validation [getErrorMessage ()])
-        | x when x.Length < requiredLength ->
-            Error (DomainError.Validation [getErrorMessage ()])
+        | x when String.IsNullOrEmpty(x) -> getError ()
+        | x when x.Length < requiredLength -> getError ()
         | x -> Ok x
 

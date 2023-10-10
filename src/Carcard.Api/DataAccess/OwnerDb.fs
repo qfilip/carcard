@@ -1,13 +1,24 @@
 ﻿namespace Carcard.Api.DataAccess
 
 open System
+open System.Linq
 open System.Data.SQLite
 open System.Data.Common
+open Microsoft.EntityFrameworkCore
 open Carcard.Api.Models
+open Carcard.Database.Entities
+open Carcard.Database.Contexts
+open Utilities
+open FsToolkit.ErrorHandling
 
 type OwnerRelations = OwnerRelations
 
 type OwnerDbRecord = DbRecord<Owner, OwnerRelations>
+
+module OwnerDbRecord =
+    let ofEntity (x: OwnerEntity) =
+        x
+        ()
 
 module OwnerDb =
     let mapDbRecord (rdr: DbDataReader) =
@@ -38,20 +49,18 @@ module OwnerDb =
         (formatter, operation)
 
 
-    let getByIdQuery (id: Guid) =
-        let formatter (cmd: SQLiteCommand) =
-            cmd.CommandText <- "SELECT * FROM Owner WHERE Id = @Id"
-            cmd.Parameters.AddWithValue("@Id", id.ToString()) |> ignore
+    let getByIdQuery (id: Guid) (ctx: AppDbContext) = task {
+        let predicate =
+            <@ Func<OwnerEntity, bool>(fun x -> x.Id = id) @>
+            |> Lambda.toExpression
 
-        let operation (cmd: SQLiteCommand) = task {
-            use! reader = cmd.ExecuteReaderAsync();
-            
-            match reader.Read() with
-            | true -> return Some (mapDbRecord reader)
-            | false -> return None
-        }
-
-        (formatter, operation)
+        let! entity = 
+            ctx.Owners
+                .Where(predicate)
+                .FirstOrDefaultAsync()
+         
+        return Option.ofNull entity
+    }
     
 
     let getOwnerByNameQuery (name: string) =

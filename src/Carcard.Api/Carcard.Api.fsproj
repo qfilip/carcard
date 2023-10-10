@@ -11,6 +11,7 @@
     <Compile Include="ComputationExpressions\ResultExpression.fs" />
     <Compile Include="Primitives\DomainError.fs" />
     <Compile Include="Primitives\Validators.fs" />
+    <Compile Include="Primitives\String1.fs" />
     <Compile Include="Primitives\Year.fs" />
     <Compile Include="Models\Maintenance.fs" />
     <Compile Include="Models\Vehicle.fs" />

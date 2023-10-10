@@ -3,6 +3,7 @@
 open System
 open Carcard.Api.Primitives
 open Carcard.Api.ComputationExpressions
+open Carcard.Database.Entities
 
 type Owner = {
     Name: string
@@ -24,6 +25,14 @@ module Owner =
         exp {
             let! oname = validateName name
             return { Name = oname; Vehicles = vehicles }
+        }
+
+    let ofEntity (x: OwnerEntity) =
+        let exp = ResultExpression()
+        exp {
+            let! name = x.Name |> validateName
+            // and! vhs = x.Vehicles |> List.map (fun x -> x)
+            return { Name = name; Vehicles = [] }
         }
 
     type Utils() =
