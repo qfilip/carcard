@@ -1,13 +1,12 @@
 ﻿namespace Carcard.Api.Models
 
 open System
+open Carcard.Api.Primitives
 
 type Maintenance = {
-    Id: Guid
-    Repairman: string
+    Repairman: String2
     Date: DateTime
-    Distance: int
-    Description: string
-    Cost: int
+    Distance: Distance
+    Description: String2
+    Cost: MaintenanceCost
 }
-

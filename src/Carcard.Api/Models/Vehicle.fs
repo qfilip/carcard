@@ -5,8 +5,8 @@ open Carcard.Api.Primitives
 open Carcard.Api.ComputationExpressions
 
 type Vehicle = {
-    Vendor: string
-    Model: string
+    Vendor: String1
+    Model: String1
     Year: DateTime
     MaintenanceHistory: Maintenance list
 }
