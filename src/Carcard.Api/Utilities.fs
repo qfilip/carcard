@@ -13,7 +13,27 @@ open Microsoft.FSharp.Linq.RuntimeHelpers
 
         let toNull = function | Some x -> x | None -> null
     
-    
+    module Result =
+        let allOk (rs: seq<Result<'a, 'b>>) =
+            rs
+            |> Seq.forall (function | Ok _ -> true | Error _ -> false)
+            |> fun noErrors ->
+                match noErrors with
+                | true ->
+                    rs
+                    |> Seq.fold (fun acc x ->
+                        match x with
+                        | Ok v -> v::acc
+                        | Error _ -> acc
+                    ) []
+                | false ->
+                    rs
+                    |> Seq.fold (fun acc x ->
+                        match x with
+                        | Ok _ -> acc
+                        | Error es -> es::acc
+                    ) []
+
     module Lambda =
         let toExpression (``f# lambda`` : Quotations.Expr<'a>) =
             ``f# lambda``

@@ -6,6 +6,21 @@ open Carcard.Database.Entities
 open Carcard.Api.ComputationExpressions
 open Carcard.Api.Primitives
 
+type MaintenanceRelations = {
+    VehicleId: Guid
+}
+
+module MaintenanceRelations =
+    let ofEntity (e: MaintenanceEntity) =
+        {
+            VehicleId = e.VehicleId
+        }
+
+    let populateRelations (e: MaintenanceEntity) (r: MaintenanceRelations) =
+        e.VehicleId <- r.VehicleId
+
+type MaintenanceDbRecord = DbRecord<Maintenance, MaintenanceRelations>
+
 module MaintenanceDb =
     let ofEntity (e: MaintenanceEntity) =
         ResultExpression() {

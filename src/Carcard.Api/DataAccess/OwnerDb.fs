@@ -12,7 +12,6 @@ open Utilities
 open FsToolkit.ErrorHandling
 
 type OwnerRelations = OwnerRelations
-
 type OwnerDbRecord = DbRecord<Owner, OwnerRelations>
 
 module OwnerDbRecord =

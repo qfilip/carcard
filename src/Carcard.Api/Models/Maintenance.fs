@@ -3,6 +3,7 @@
 open System
 open Carcard.Api.Primitives
 open Carcard.Api.ComputationExpressions
+open Carcard.Database.Entities
 
 type Maintenance = {
     Repairman: String2
@@ -34,4 +35,10 @@ module Maintenance =
             }
         }
     
-    // type Utils() =
+    let ofEntity (e: MaintenanceEntity) =
+        validate
+            e.Repairman
+            e.Date
+            e.Distance
+            e.Description
+            e.Cost
