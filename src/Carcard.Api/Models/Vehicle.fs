@@ -30,6 +30,9 @@ module Vehicle =
             }
         }
 
+    let toEntity (x: Vehicle) =
+        
+
     type Utils() =
         static member create (vendor: string, model: string, year: int) =
             validate vendor model year []

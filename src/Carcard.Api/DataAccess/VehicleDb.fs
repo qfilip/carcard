@@ -5,15 +5,6 @@ open System.Data.Common
 open System.Data.SQLite
 open Carcard.Api.Models
 
-type VehicleRelations = {
-    OwnerId: Guid
-} with
-    static member Empty = {
-        OwnerId = Guid.Empty
-    }
-
-type VehicleDbRecord = DbRecord<Vehicle, VehicleRelations>
-
 module VehicleDb =
     let private mapDbRecord (rdr: DbDataReader) =
         ()

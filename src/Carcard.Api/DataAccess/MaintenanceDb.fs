@@ -1,13 +1,10 @@
 ﻿namespace Carcard.Api.DataAccess
 
+open System
 open Carcard.Api.Models
 open Carcard.Database.Entities
 open Carcard.Api.ComputationExpressions
 open Carcard.Api.Primitives
-
-
-type MaintenanceRelations = MaintenanceRelations
-type MaintenanceDbRecord = DbRecord<Maintenance, MaintenanceRelations>
 
 module MaintenanceDb =
     let ofEntity (e: MaintenanceEntity) =
@@ -25,18 +22,18 @@ module MaintenanceDb =
             return {
                 Model = model
                 EntityData = entityData
-                EntityRelations = MaintenanceRelations
+                EntityRelations = MaintenanceRelations.ofEntity e
             }
         }
 
     let toEntity (x: MaintenanceDbRecord) =
         let e = MaintenanceEntity()
+        
         EntityData.populateBaseEntity e x.EntityData
+        MaintenanceRelations.populateRelations e x.EntityRelations
         
         e.Repairman     <- x.Model.Repairman    |> String2.raw
         e.Date          <- x.Model.Date
         e.Distance      <- x.Model.Distance     |> Distance.raw
         e.Description   <- x.Model.Description  |> String2.raw
         e.Cost          <- x.Model.Cost         |> MaintenanceCost.raw
-
-        e.VehicleId     <- x.EntityRelations.

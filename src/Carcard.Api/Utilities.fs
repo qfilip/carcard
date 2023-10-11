@@ -10,6 +10,8 @@ open Microsoft.FSharp.Linq.RuntimeHelpers
             |> Option.defaultWith (fun _ -> [])
 
         let ofNull (x: 'a) = if x = null then Some x else None
+
+        let toNull = function | Some x -> x | None -> null
     
     
     module Lambda =
